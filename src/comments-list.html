@@ -1,0 +1,24 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="comments-item.html">
+
+<dom-module id="comments-list">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <div>Comments list
+      <comment-item>item1</comment-item>
+      <comment-item>item2</comment-item>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'comments-list'
+
+    });
+  </script>
+</dom-module>
