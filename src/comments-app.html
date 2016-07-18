@@ -5,15 +5,65 @@
 <dom-module id="comments-app">
   <template>
     <style>
+      .b-container{
+        width:600px;
+        padding:40px;
+      }
+      .b-comments{
+        font-family: arial;
+
+      }
+      .b-comments__header{
+        margin:0 0 15px 0;
+      }
+      .b-container__comments{
+
+      }
+      .b-comments__body{
+
+      }
+      .b-body fieldset{
+        border: 2px solid #000;
+      }
+
     </style>
-    werwer
-    <comments-list></comments-list>
-    <comments-form></comments-form>
+    <div class="b-container">
+      <div class="b-container__comments">
+        <div class="b-comments">
+          Comments on polymer
+          <div class="b-comments__body">
+            <div class="b-body">
+              <comments-list comments="{{ comments }}"></comments-list>
+            </div>
+          </div>
+          <comments-form comment="{{ comment }}"></comments-form>
+        </div>
+      </div>
+    </div>
   </template>
 
   <script>
     Polymer({
-      is: 'comments-app'
+      is: 'comments-app',
+      attached: function() {
+       console.log(this.comments);
+      },
+      properties: {
+        comment: {
+          type: Object,
+          notify: true
+        },
+        comments: {
+          type: Array,
+          notify: true,
+          value: function() {
+            return [
+              { text: 'fisttext', author: 'firstAutrhor' },
+              { text: 'secondtext', author: 'secondAutrhor' }
+            ]
+          }
+        }
+      }
     });
   </script>
 </dom-module>

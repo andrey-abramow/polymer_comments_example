@@ -8,16 +8,20 @@
         display: block;
       }
     </style>
-    <div>Comments list
-      <comment-item>item1</comment-item>
-      <comment-item>item2</comment-item>
-    </div>
+    <template is="dom-repeat" items="{{ comments }}">
+      <comments-item comment="{{ item }}"></comments-item>
+    </template>
   </template>
 
   <script>
     Polymer({
-
-      is: 'comments-list'
+      is: 'comments-list',
+      properties: {
+        comments: {
+          type: Array,
+          notify: true
+        }
+      }
 
     });
   </script>

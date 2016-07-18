@@ -6,14 +6,47 @@
       :host {
         display: block;
       }
+      .b-body__item{
+        margin:20px;
+        position:relative;
+      }
+      .b-body__item-delete{
+        display:block;
+        box-sizing:border-box;
+        position:absolute;
+        bottom:0;
+        right:0;
+        font-size:0.5em;
+      }
+      .b-body__item-name{
+        margin:10px 0;
+      }
     </style>
-    <div>comments-item</div>
+    <div class="b-body__item">
+      <h3 class="b-body__item-name">{{ comment.author }}</h3>
+      {{ comment.text }}
+      <a href="#" on-click="delete" class="b-body__item-delete">Delete comment</a>
+    </div>
   </template>
-
   <script>
     Polymer({
 
-      is: 'comments-item'
+      is: 'comments-item',
+      properties: {
+        comment: {
+          type: Object,
+          notify: true
+        }
+      },
+      observers: [
+        'removedComment(comment)'
+      ],
+      removedComment: function() {
+        console.log('removedComment')
+      },
+      delete: function() {
+        console.log('delete');
+      }
 
     });
   </script>
