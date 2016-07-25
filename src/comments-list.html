@@ -2,12 +2,26 @@
 <link rel="import" href="comments-item.html">
 
 <dom-module id="comments-list">
+  <!-- The <dom-module> tag wraps an element's local DOM definition.
+   In this case, the id attribute shows that this module includes the local DOM for an element called comments-list.
+   -->
   <template>
+    <!-- The <template> actually defines the element's local DOM structure and styling.
+     This is where you'll add markup for your custom element
+    -->
     <style>
+    /*The <style> element inside the <template> lets you define styles that are scoped to the local DOM,
+     so they don't affect the rest of the document.
+    */
+    /* local styles go here */
       :host {
+        /* The :host pseudo-class matches the custom element you're defining (in this case, the <comments-list>).
+         This is the element that contains or hosts the local DOM tree.
+        */
         display: block;
       }
     </style>
+    <!-- local DOM goes here -->
     <template id="comments" is="dom-repeat" items="{{comments}}" as="comment">
       <comments-item comment="{{comment}}"></comments-item>
     </template>
@@ -15,12 +29,31 @@
 
   <script>
     Polymer({
+      /* this is the element's prototype */
       is: 'comments-list',
+      /* The is property on the prototype is the new element's name.
+         It has to match the id on the <dom-module> that contains the element's template.
+     */
       properties: {
+        /*
+          Declaring a property in the properties object is a good idea
+          if the property is going to be part of your element's public API.
+        */
         comments: {
           type: Array,
+          /*
+            The value specifies the property's default value.
+          */
           value: function() { return []; },
+          /*
+            The notify property tells Polymer to dispatch property change events when the property value changes.
+            This lets the change be observed by other nodes.
+          */
           notify: true
+          /*
+            The reflectToAttribute property tells Polymer to update the corresponding attribute when the property changes.
+          */
+          // reflectToAttribute: true
         }
       },
       listeners: {
@@ -28,7 +61,6 @@
       },
 
       commentsChanged: function(e) {
-        console.log('commentsChanged', e)
         this.setAttribute('comments', JSON.stringify(this.comments))
       }
 
