@@ -8,8 +8,8 @@
         display: block;
       }
     </style>
-    <template is="dom-repeat" items="{{ comments }}">
-      <comments-item comment="{{ item }}"></comments-item>
+    <template id="comments" is="dom-repeat" items="{{comments}}" as="comment">
+      <comments-item comment="{{comment}}"></comments-item>
     </template>
   </template>
 
@@ -19,8 +19,17 @@
       properties: {
         comments: {
           type: Array,
+          value: function() { return []; },
           notify: true
         }
+      },
+      listeners: {
+        'comments-changed' : 'commentsChanged'
+      },
+
+      commentsChanged: function(e) {
+        console.log('commentsChanged', e)
+        this.setAttribute('comments', JSON.stringify(this.comments))
       }
 
     });

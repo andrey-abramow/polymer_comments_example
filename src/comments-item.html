@@ -1,7 +1,20 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-styles/color.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 <dom-module id="comments-item">
   <template>
+<!-- to override default paper-button styles  -->
+    <style is="custom-style">
+      paper-button.red {
+        color: var(--paper-red-a200);
+      }
+      paper-button {
+        float:right;
+        font-size: 8px;
+      }
+    </style>
+
     <style>
       :host {
         display: block;
@@ -22,11 +35,12 @@
         margin:10px 0;
       }
     </style>
-    <div class="b-body__item">
-      <h3 class="b-body__item-name">{{ comment.author }}</h3>
-      {{ comment.text }}
-      <a href="#" on-click="delete" class="b-body__item-delete">Delete comment</a>
+    <div class="b-body__item" on-click="edit">
+      <h3 id="comment"  class="b-body__item-name">[[comment.author]]</h3>
+      [[comment.text]]
+      <paper-button class="custom red" on-click="delete">delete item</paper-button>
     </div>
+
   </template>
   <script>
     Polymer({
@@ -39,15 +53,35 @@
         }
       },
       observers: [
-        'removedComment(comment)'
-      ],
+         '_getAutor(comment)'
+       ],
+
+      listeners: {
+        'comment-changed' : '_handleCommentChangedEvent'
+      },
+
+      _getAutor: function(comment) {
+        console.log('_getAutor')
+        return this.comment.author;
+      },
+
+      _handleCommentChangedEvent : function(e) {
+        console.log('_handleCommentChangedEvent');
+      },
+
       removedComment: function() {
         console.log('removedComment')
       },
-      delete: function() {
-        console.log('delete');
-      }
 
+      delete: function() {
+        // fire event to say app for deleting this comment
+        this.fire('remove-comment', this.comment)
+      },
+
+      edit: function() {
+        this.fire('comment-to-edit', this.comment)
+        this.set('comment', this.comment)
+      }
     });
   </script>
 </dom-module>

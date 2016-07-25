@@ -11,16 +11,13 @@
       }
       .b-comments{
         font-family: arial;
-
       }
       .b-comments__header{
         margin:0 0 15px 0;
       }
       .b-container__comments{
-
       }
       .b-comments__body{
-
       }
       .b-body fieldset{
         border: 2px solid #000;
@@ -33,10 +30,10 @@
           Comments on polymer
           <div class="b-comments__body">
             <div class="b-body">
-              <comments-list comments="{{ comments }}"></comments-list>
+              <comments-list comments="[[comments]]"></comments-list>
             </div>
           </div>
-          <comments-form comment="{{ comment }}"></comments-form>
+          <comments-form comment="[[comment]]"></comments-form>
         </div>
       </div>
     </div>
@@ -45,9 +42,7 @@
   <script>
     Polymer({
       is: 'comments-app',
-      attached: function() {
-       console.log(this.comments);
-      },
+
       properties: {
         comment: {
           type: Object,
@@ -57,12 +52,64 @@
           type: Array,
           notify: true,
           value: function() {
-            return [
-              { text: 'fisttext', author: 'firstAutrhor' },
-              { text: 'secondtext', author: 'secondAutrhor' }
-            ]
+            return []
           }
         }
+      },
+      listeners: {
+         'form-submit-comment' : '_handleFormSubmitCommentEvent',
+         'remove-comment' : '_handleRemoveCommentEvent',
+         'comment-to-edit' : '_handleCommentToEditEvent'
+      },
+
+      _handleCommentToEditEvent: function(e) {
+        this.comment = e.detail
+      },
+
+      _handleFormSubmitCommentEvent: function(e) {
+        newComment = e.detail
+        if (!isNaN(newComment.id)) {
+          this._updateComment(newComment)
+        }
+        else {
+          this._addNewCommentToComments(newComment)
+        };
+        this._resetCommentsToTriggerUpdateForm()
+      },
+
+      _handleRemoveCommentEvent: function(e) {
+        this._removeCommentFromComments(e.detail);
+        this._resetCommentsIds();
+        // this._resetCommentsToTriggerUpdateForm();
+      },
+
+      _removeCommentFromComments: function(comment) {
+        this.splice('comments', comment.id, 1);
+      },
+
+      _resetCommentsIds : function() {
+        for(i = 0; i < this.comments.length; i++) {
+          this.comments[i].id = i
+        }
+      },
+
+      _addNewCommentToComments: function(comment) {
+        comment.id = this.comments.length;
+        this.push('comments', comment);
+        this._resetCommentsIds()
+      },
+
+      _updateComment: function(comment) {
+        // update existing comment
+        for(i = 0; i < this.comments.length; i++) {
+          if(comment.id == this.comments[i].id) {
+            console.log(comment, this.comments)
+             this.splice('comments', i, 1, comment);
+           }
+        }
+      },
+      _resetCommentsToTriggerUpdateForm: function (){
+        this.comments = [].concat(this.comments);
       }
     });
   </script>

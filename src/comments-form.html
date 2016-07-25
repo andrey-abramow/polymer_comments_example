@@ -1,13 +1,30 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
-
+<link rel="import" href="../bower_components/paper-styles/color.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <dom-module id="comments-form">
   <template>
+    <style is="custom-style">
+      paper-button.green {
+        background-color: var(--paper-green-500);
+        color: white;
+      }
+      paper-button.green[active] {
+        background-color: var(--paper-red-500);
+      }
+      paper-button {
+        padding: 5px;
+        margin: 10px;
+        float: right;
+        width: 100px;
+        border: 2px solid #000;
+        background: #fff;
+      }
+    </style>
     <style>
       :host {
         display: block;
       }
       .b-form{
-
         margin:10px 0;
         border: 2px solid #000;
       }
@@ -27,15 +44,6 @@
       .b-comments__form{
         font-family: arial;
         margin:10px 0;
-
-      }
-      .b-comments__formItem-button{
-        padding: 5px;
-        margin: 10px;
-        float: right;
-        width: 100px;
-        border: 2px solid #000;
-        background: #fff;
       }
     </style>
     <div class="b-comments__form">
@@ -53,11 +61,7 @@
             value="{{ comment.text::input }}"
             placeholder="Comment text"
           ></textarea>
-          <input class="b-comments__formItem-button"
-            type="button"
-            value="Submit"
-            on-click="submit"
-          ></input>
+          <paper-button class="custom green" on-click="submit">Submit</paper-button>
         </form>
       </div>
     </div>
@@ -74,8 +78,26 @@
           value: function() { return { text: '', author: '' } }
         }
       },
-      submit: function() {
-        console.log('submit', this.comment)
+
+      listeners: {
+        'edit-comment' : '_handleEditCommentEvent'
+      },
+
+      submit: function(_e) {
+        this._fireFormSubmitCommentEvent();
+        this._resetCommentToDefaultState();
+      },
+
+      _resetCommentToDefaultState: function() {
+        this.comment = { text: '', author: '' }
+      },
+
+      _handleEditCommentEvent: function(e) {
+        this.comment = e.detail
+      },
+
+      _fireFormSubmitCommentEvent: function() {
+        this.fire('form-submit-comment', this.comment);
       }
 
     });
